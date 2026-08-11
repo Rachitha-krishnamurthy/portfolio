@@ -481,34 +481,6 @@ body::after {
   background: rgba(255, 255, 255, 0.05);
 }
 
-.hero-meta {
-  position: absolute;
-
-  left: 8vw;
-  right: 8vw;
-  bottom: 45px;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  font-family: "DM Mono", monospace;
-
-  font-size: 9px;
-
-  letter-spacing: 0.16em;
-
-  color: #65758f;
-}
-
-.hero-meta span:last-child {
-  display: flex;
-
-  align-items: center;
-
-  gap: 8px;
-}
-
 .hero-model-label {
   position: absolute;
 
@@ -3210,11 +3182,6 @@ footer {
 
   .actions {
     flex-wrap: wrap;
-  }
-
-  .hero-meta {
-    left: 7vw;
-    right: 7vw;
   }
 
   .section {

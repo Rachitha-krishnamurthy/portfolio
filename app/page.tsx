@@ -234,15 +234,6 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="hero-meta">
-          <span>01 / 06</span>
-
-          <span>
-            SCROLL TO EXPLORE
-            <ArrowDown size={13} />
-          </span>
-        </div>
-
         <div className="hero-model-label">
           <span className="pulse" />
           INTERACTIVE SYSTEM / 2026
