@@ -2954,7 +2954,7 @@ footer {
 
 @media (max-width: 900px) {
   .navlinks {
-    display: none;
+    gap: 22px;
   }
 
   .hero {
@@ -3060,9 +3060,15 @@ footer {
   }
 
   .navcta {
-    padding:
-      9px
-      13px;
+    display: none;
+  }
+
+  .navlinks {
+    gap: 12px;
+  }
+
+  .navlinks a {
+    font-size: 9px;
   }
 
   .hero {
