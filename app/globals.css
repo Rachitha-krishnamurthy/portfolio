@@ -3125,6 +3125,8 @@ footer {
   .mobile-menu {
     position: absolute;
 
+    display: block;
+
     top: calc(100% + 10px);
     right: 5vw;
 
