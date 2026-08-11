@@ -20,6 +20,8 @@
 
 html {
   scroll-behavior: auto;
+
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -35,6 +37,8 @@ body {
     sans-serif;
 
   overflow-x: hidden;
+
+  touch-action: pan-y;
 }
 
 a {
@@ -3051,7 +3055,7 @@ footer {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), (pointer: coarse) {
   .ambient {
     display: none;
   }
