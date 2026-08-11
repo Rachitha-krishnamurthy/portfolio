@@ -13,7 +13,6 @@ import {
   Github,
   Linkedin,
 } from "lucide-react";
-import SmoothScroll from "../components/SmoothScroll";
 
 const ImmersiveScene = dynamic(
   () => import("../components/ImmersiveScene"),
@@ -129,9 +128,6 @@ export default function Home() {
 
   return (
     <main>
-      {/* Smooth scrolling */}
-      <SmoothScroll />
-
       {/* Original 3D background */}
       <ImmersiveScene />
 
