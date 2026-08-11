@@ -107,6 +107,7 @@ const projects = [
 
 export default function Home() {
   const [isNavScrolling, setIsNavScrolling] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -142,7 +143,11 @@ export default function Home() {
           NAVIGATION
       ===================================================== */}
 
-      <nav className={`nav${isNavScrolling ? " nav-hidden" : ""}`}>
+      <nav
+        className={`nav${
+          isNavScrolling && !isMobileMenuOpen ? " nav-hidden" : ""
+        }${isMobileMenuOpen ? " nav-menu-open" : ""}`}
+      >
         <a className="brand" href="#top">
           RK<span>.</span>
         </a>
@@ -158,6 +163,33 @@ export default function Home() {
           Let&apos;s talk
           <ArrowUpRight size={15} />
         </a>
+
+        <button
+          className="mobile-menu-toggle"
+          type="button"
+          aria-label="Toggle navigation menu"
+          aria-expanded={isMobileMenuOpen}
+          onClick={() => setIsMobileMenuOpen((isOpen) => !isOpen)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+
+        <div className="mobile-menu" aria-label="Mobile navigation">
+          <a href="#work" onClick={() => setIsMobileMenuOpen(false)}>
+            Work
+          </a>
+          <a href="#skills" onClick={() => setIsMobileMenuOpen(false)}>
+            Skills
+          </a>
+          <a href="#about" onClick={() => setIsMobileMenuOpen(false)}>
+            About
+          </a>
+          <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
+            Contact
+          </a>
+        </div>
       </nav>
 
       {/* =====================================================

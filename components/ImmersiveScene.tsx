@@ -546,12 +546,13 @@ export default function ImmersiveScene() {
     setProgress,
   ] = useState(0);
 
+  const shouldReduceExperience = () =>
+    window.matchMedia(
+      "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)"
+    ).matches || navigator.maxTouchPoints > 0;
+
   const [isReducedExperience, setIsReducedExperience] =
-    useState(() =>
-      window.matchMedia(
-        "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)"
-      ).matches
-    );
+    useState(shouldReduceExperience);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(
@@ -559,7 +560,7 @@ export default function ImmersiveScene() {
     );
 
     const updateExperience = () => {
-      setIsReducedExperience(mediaQuery.matches);
+      setIsReducedExperience(shouldReduceExperience());
     };
 
     mediaQuery.addEventListener("change", updateExperience);
