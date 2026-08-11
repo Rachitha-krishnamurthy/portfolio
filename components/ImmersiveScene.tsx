@@ -546,7 +546,34 @@ export default function ImmersiveScene() {
     setProgress,
   ] = useState(0);
 
+  const [isReducedExperience, setIsReducedExperience] =
+    useState(() =>
+      window.matchMedia(
+        "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)"
+      ).matches
+    );
+
   useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)"
+    );
+
+    const updateExperience = () => {
+      setIsReducedExperience(mediaQuery.matches);
+    };
+
+    mediaQuery.addEventListener("change", updateExperience);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateExperience);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isReducedExperience) {
+      return;
+    }
+
     let ticking = false;
 
     const update = () => {
@@ -607,7 +634,11 @@ export default function ImmersiveScene() {
         update
       );
     };
-  }, []);
+  }, [isReducedExperience]);
+
+  if (isReducedExperience) {
+    return null;
+  }
 
   return (
     <div className="webgl-layer">

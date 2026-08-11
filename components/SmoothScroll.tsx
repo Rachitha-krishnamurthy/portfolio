@@ -5,6 +5,14 @@ import Lenis from "lenis";
 
 export default function SmoothScroll() {
   useEffect(() => {
+    if (
+      window.matchMedia(
+        "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)"
+      ).matches
+    ) {
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 1.15,
       smoothWheel: true,

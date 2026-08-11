@@ -3047,6 +3047,10 @@ footer {
 }
 
 @media (max-width: 600px) {
+  .ambient {
+    display: none;
+  }
+
   .nav {
     height: 72px;
 
@@ -3136,19 +3140,25 @@ footer {
   }
 
   .project-card {
-    top: 84px;
+    position: relative;
+
+    top: auto;
 
     height: 620px;
 
     min-height: 620px;
 
-    margin-bottom: 7vh;
+    margin-bottom: 32px;
 
     border-radius: 25px;
   }
 
   .project-visual {
     height: 50%;
+  }
+
+  .project-list {
+    padding-bottom: 0;
   }
 
   .project-content {
@@ -3309,6 +3319,25 @@ footer {
 
   .socials {
     flex-wrap: wrap;
+  }
+
+  .publication-card {
+    min-height: 0;
+
+    padding: 28px;
+  }
+
+  .publication-card h2 {
+    margin:
+      24px
+      0
+      32px;
+  }
+
+  .publication-card-footer {
+    align-items: flex-start;
+
+    flex-direction: column;
   }
 
   footer {
