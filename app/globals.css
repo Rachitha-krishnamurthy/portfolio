@@ -3526,7 +3526,6 @@ footer {
 }
 
 @media (max-width: 767px), (pointer: coarse) {
-  .webgl-layer,
   .ambient {
     display: none;
   }

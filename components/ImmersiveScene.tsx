@@ -24,7 +24,11 @@ import {
    MAIN 3D CORE
    ========================================================= */
 
-function Core() {
+function Core({
+  lowPower,
+}: {
+  lowPower: boolean;
+}) {
   const group =
     useRef<THREE.Group>(null);
 
@@ -89,7 +93,7 @@ function Core() {
 
       <mesh>
         <icosahedronGeometry
-          args={[1.65, 4]}
+          args={[1.65, lowPower ? 2 : 4]}
         />
 
         <meshStandardMaterial
@@ -108,7 +112,7 @@ function Core() {
 
       <mesh scale={0.72}>
         <sphereGeometry
-          args={[1, 64, 64]}
+          args={[1, lowPower ? 24 : 64, lowPower ? 24 : 64]}
         />
 
         <meshStandardMaterial
@@ -155,7 +159,7 @@ function Core() {
             2.45,
             0.014,
             12,
-            180,
+            lowPower ? 90 : 180,
           ]}
         />
 
@@ -183,7 +187,7 @@ function Core() {
             2.85,
             0.01,
             12,
-            180,
+            lowPower ? 90 : 180,
           ]}
         />
 
@@ -211,7 +215,7 @@ function Core() {
             3.2,
             0.007,
             12,
-            180,
+            lowPower ? 90 : 180,
           ]}
         />
 
@@ -237,8 +241,8 @@ function Core() {
         <sphereGeometry
           args={[
             0.055,
-            24,
-            24,
+            lowPower ? 12 : 24,
+            lowPower ? 12 : 24,
           ]}
         />
 
@@ -258,8 +262,8 @@ function Core() {
         <sphereGeometry
           args={[
             0.045,
-            24,
-            24,
+            lowPower ? 12 : 24,
+            lowPower ? 12 : 24,
           ]}
         />
 
@@ -279,8 +283,8 @@ function Core() {
         <sphereGeometry
           args={[
             0.04,
-            24,
-            24,
+            lowPower ? 12 : 24,
+            lowPower ? 12 : 24,
           ]}
         />
 
@@ -300,8 +304,10 @@ function Core() {
 
 function SceneWorld({
   progress,
+  lowPower,
 }: {
   progress: number;
+  lowPower: boolean;
 }) {
   const group =
     useRef<THREE.Group>(null);
@@ -372,11 +378,11 @@ function SceneWorld({
         rotationIntensity={0.15}
         floatIntensity={0.45}
       >
-        <Core />
+        <Core lowPower={lowPower} />
       </Float>
 
       <Sparkles
-        count={180}
+        count={lowPower ? 45 : 180}
         scale={[
           12,
           9,
@@ -469,8 +475,10 @@ function CameraRig({
 
 function SceneContents({
   progress,
+  lowPower,
 }: {
   progress: number;
+  lowPower: boolean;
 }) {
   return (
     <>
@@ -526,6 +534,7 @@ function SceneContents({
 
       <SceneWorld
         progress={progress}
+        lowPower={lowPower}
       />
 
       <CameraRig
@@ -546,32 +555,44 @@ export default function ImmersiveScene() {
     setProgress,
   ] = useState(0);
 
-  const shouldReduceExperience = () =>
+  const shouldUseLowPowerScene = () =>
     window.matchMedia(
-      "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)"
+      "(max-width: 767px), (pointer: coarse)"
     ).matches || navigator.maxTouchPoints > 0;
 
-  const [isReducedExperience, setIsReducedExperience] =
-    useState(shouldReduceExperience);
+  const [isLowPowerScene, setIsLowPowerScene] =
+    useState(shouldUseLowPowerScene);
+
+  const [prefersReducedMotion, setPrefersReducedMotion] =
+    useState(() =>
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(
-      "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)"
+      "(max-width: 767px), (pointer: coarse)"
+    );
+
+    const reducedMotionQuery = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
     );
 
     const updateExperience = () => {
-      setIsReducedExperience(shouldReduceExperience());
+      setIsLowPowerScene(shouldUseLowPowerScene());
+      setPrefersReducedMotion(reducedMotionQuery.matches);
     };
 
     mediaQuery.addEventListener("change", updateExperience);
+    reducedMotionQuery.addEventListener("change", updateExperience);
 
     return () => {
       mediaQuery.removeEventListener("change", updateExperience);
+      reducedMotionQuery.removeEventListener("change", updateExperience);
     };
   }, []);
 
   useEffect(() => {
-    if (isReducedExperience) {
+    if (isLowPowerScene || prefersReducedMotion) {
       return;
     }
 
@@ -635,9 +656,9 @@ export default function ImmersiveScene() {
         update
       );
     };
-  }, [isReducedExperience]);
+  }, [isLowPowerScene, prefersReducedMotion]);
 
-  if (isReducedExperience) {
+  if (prefersReducedMotion) {
     return null;
   }
 
@@ -645,11 +666,8 @@ export default function ImmersiveScene() {
     <div className="webgl-layer">
 
       <Canvas
-        dpr={[
-          1,
-          1.5,
-        ]}
-        frameloop="always"
+        dpr={isLowPowerScene ? [1, 1] : [1, 1.5]}
+        frameloop={isLowPowerScene ? "demand" : "always"}
         camera={{
           position: [
             0,
@@ -664,16 +682,18 @@ export default function ImmersiveScene() {
           far: 100,
         }}
         gl={{
-          antialias: true,
+          antialias: !isLowPowerScene,
 
           alpha: false,
 
-          powerPreference:
-            "high-performance",
+          powerPreference: isLowPowerScene
+            ? "low-power"
+            : "high-performance",
         }}
       >
         <SceneContents
           progress={progress}
+          lowPower={isLowPowerScene}
         />
       </Canvas>
 
