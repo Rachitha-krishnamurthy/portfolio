@@ -592,7 +592,7 @@ export default function ImmersiveScene() {
   }, []);
 
   useEffect(() => {
-    if (isLowPowerScene || prefersReducedMotion) {
+    if (prefersReducedMotion) {
       return;
     }
 
@@ -656,7 +656,7 @@ export default function ImmersiveScene() {
         update
       );
     };
-  }, [isLowPowerScene, prefersReducedMotion]);
+  }, [prefersReducedMotion]);
 
   if (prefersReducedMotion) {
     return null;
@@ -667,7 +667,7 @@ export default function ImmersiveScene() {
 
       <Canvas
         dpr={isLowPowerScene ? [1, 1] : [1, 1.5]}
-        frameloop={isLowPowerScene ? "demand" : "always"}
+        frameloop="always"
         camera={{
           position: [
             0,
@@ -686,9 +686,7 @@ export default function ImmersiveScene() {
 
           alpha: false,
 
-          powerPreference: isLowPowerScene
-            ? "low-power"
-            : "high-performance",
+          powerPreference: "high-performance",
         }}
       >
         <SceneContents
