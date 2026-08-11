@@ -3221,7 +3221,7 @@ footer {
     width: 88vw;
 
     padding:
-      90px
+      72px
       0;
   }
 
@@ -3265,33 +3265,66 @@ footer {
 
     top: auto;
 
-    height: 620px;
+    flex: 0 0 calc(100% - 46px);
 
-    min-height: 620px;
+    height: 560px;
 
-    margin-bottom: 32px;
+    min-height: 560px;
+
+    margin-bottom: 0;
 
     border-radius: 25px;
+
+    scroll-snap-align: start;
   }
 
   .project-visual {
-    height: 50%;
+    height: 46%;
   }
 
   .project-list {
-    padding-bottom: 0;
+    width: calc(100% + 6vw);
+
+    flex-direction: row;
+
+    gap: 14px;
+
+    margin-right: -6vw;
+
+    padding:
+      4px
+      6vw
+      16px
+      0;
+
+    overflow-x: auto;
+
+    overscroll-behavior-x: contain;
+
+    scroll-snap-type: x mandatory;
+
+    scrollbar-width: none;
+  }
+
+  .project-list::-webkit-scrollbar {
+    display: none;
   }
 
   .project-content {
-    bottom: 120px;
+    bottom: 108px;
   }
 
   .project-bottom {
-    bottom: 35px;
+    bottom: 24px;
   }
 
   .project-content h3 {
-    font-size: 40px;
+    font-size:
+      clamp(
+        30px,
+        8vw,
+        40px
+      );
   }
 
   .project-content p {
@@ -3304,6 +3337,26 @@ footer {
       auto;
 
     gap: 12px;
+  }
+
+  .skill-card {
+    min-height: 0;
+
+    padding: 22px;
+  }
+
+  .skill-card-head {
+    margin-bottom: 18px;
+  }
+
+  .edu-card {
+    min-height: 180px;
+
+    padding: 26px;
+  }
+
+  .edu-card h3 {
+    font-size: 25px;
   }
 
   .security-radar {
