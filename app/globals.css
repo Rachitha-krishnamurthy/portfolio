@@ -2753,21 +2753,85 @@ body::after {
   justify-content: center;
 
   overflow: hidden;
+
+  isolation: isolate;
 }
+
+/* =========================================================
+   CONTACT VIDEO BACKGROUND
+   ========================================================= */
+
+.contact-video {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  z-index: 0;
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   VIDEO DARK OVERLAY
+   ========================================================= */
+
+.contact-video-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 5, 11, 0.88) 0%,
+      rgba(2, 5, 11, 0.60) 45%,
+      rgba(2, 5, 11, 0.42) 100%
+    );
+
+  backdrop-filter: blur(1px);
+}
+
+/* =========================================================
+   CONTACT AMBIENT GLOW
+   ========================================================= */
 
 .contact-grid {
   position: absolute;
 
   inset: 0;
 
+  z-index: 2;
+
   pointer-events: none;
 
   background:
     radial-gradient(
       circle at 50% 50%,
-      rgba(58, 117, 255, 0.15),
+      rgba(58, 117, 255, 0.18),
       transparent 45%
     );
+}
+
+/* =========================================================
+   CONTACT CONTENT
+   ========================================================= */
+
+.contact-content {
+  position: relative;
+
+  z-index: 3;
+
+  width: 100%;
 }
 
 .contact h2 {
@@ -2816,11 +2880,17 @@ body::after {
   padding-bottom: 10px;
 
   transition:
-    color 250ms ease;
+    color 250ms ease,
+    transform 250ms ease,
+    border-color 250ms ease;
 }
 
 .email:hover {
   color: var(--cyan);
+
+  border-color: var(--cyan);
+
+  transform: translateX(5px);
 }
 
 .email svg {
@@ -2833,6 +2903,8 @@ body::after {
   display: flex;
 
   align-items: center;
+
+  flex-wrap: wrap;
 
   gap: 12px;
 
@@ -2851,26 +2923,32 @@ body::after {
 
   border:
     1px solid
-    rgba(130, 165, 220, 0.15);
+    rgba(130, 165, 220, 0.20);
 
   border-radius: 50%;
 
-  color: #8799b3;
+  color: #b9c8df;
+
+  background: rgba(3, 9, 18, 0.45);
+
+  backdrop-filter: blur(10px);
 
   transition:
     color 250ms ease,
     border-color 250ms ease,
-    transform 250ms ease;
+    transform 250ms ease,
+    background 250ms ease;
 }
 
 .socials a:hover {
-  color: white;
+  color: var(--cyan);
 
   border-color:
-    rgba(130, 200, 255, 0.4);
+    rgba(130, 220, 255, 0.55);
 
-  transform:
-    translateY(-3px);
+  background: rgba(8, 25, 45, 0.72);
+
+  transform: translateY(-3px);
 }
 
 .socials svg {
@@ -2892,7 +2970,17 @@ body::after {
 
   letter-spacing: 0.12em;
 
-  color: #64748c;
+  color: #9aabc4;
+}
+
+.socials span a {
+  width: auto;
+  min-width: 43px;
+  height: 43px;
+
+  padding: 0 15px;
+
+  border-radius: 999px;
 }
 
 .socials span svg {
@@ -3449,6 +3537,20 @@ footer {
       80px;
   }
 
+  .contact-video {
+    object-position: center center;
+  }
+
+  .contact-video-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(2, 5, 11, 0.72) 0%,
+        rgba(2, 5, 11, 0.62) 55%,
+        rgba(2, 5, 11, 0.82) 100%
+      );
+  }
+
   .contact h2 {
     font-size:
       clamp(
@@ -3460,6 +3562,10 @@ footer {
 
   .socials {
     flex-wrap: wrap;
+  }
+
+  .socials span {
+    margin-left: 0;
   }
 
   .publication-card {
@@ -3518,5 +3624,623 @@ footer {
     scroll-behavior: auto !important;
 
     transition-duration: 0.01ms !important;
+  }
+}
+/* =========================================================
+   CONTACT — FULL VIEWPORT VIDEO
+   ========================================================= */
+
+.contact {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 100svh;
+
+  padding: 120px 8vw 70px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  overflow: hidden;
+  isolation: isolate;
+  box-sizing: border-box;
+}
+
+/* Full-screen video */
+.contact-video {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center center;
+
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Dark cinematic treatment */
+.contact-video-overlay {
+  position: absolute;
+  inset: 0;
+
+  z-index: 1;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 7, 16, 0.78) 0%,
+      rgba(2, 7, 16, 0.48) 48%,
+      rgba(2, 7, 16, 0.58) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(2, 7, 16, 0.34) 0%,
+      rgba(2, 7, 16, 0.12) 45%,
+      rgba(2, 7, 16, 0.60) 100%
+    );
+}
+
+/* Existing glow */
+.contact-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(58, 117, 255, 0.12),
+      transparent 48%
+    );
+}
+
+/* Content above video */
+.contact-content {
+  position: relative;
+  z-index: 3;
+}
+
+/* Keep navbar visible and transparent over Contact video */
+.nav.nav-contact-active {
+  z-index: 100;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.10) !important;
+  box-shadow: none !important;
+}
+
+/* Contact sound control */
+.contact-sound-toggle {
+  position: absolute;
+  right: 8vw;
+  bottom: 34px;
+
+  z-index: 10;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  min-height: 36px;
+  padding: 0 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+
+  background: rgba(3, 9, 18, 0.38);
+  color: rgba(235, 242, 255, 0.82);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+
+  cursor: pointer;
+
+  transition:
+    border-color 200ms ease,
+    background 200ms ease,
+    color 200ms ease,
+    transform 200ms ease;
+}
+
+.contact-sound-toggle:hover {
+  border-color: rgba(130, 200, 255, 0.55);
+  background: rgba(3, 14, 28, 0.62);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.sound-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.sound-bars i {
+  display: block;
+  width: 2px;
+  height: 5px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.sound-bars i:nth-child(2) {
+  height: 9px;
+}
+
+.sound-bars i:nth-child(3) {
+  height: 6px;
+}
+
+.sound-bars.is-on i {
+  animation: contactSoundBars 700ms ease-in-out infinite alternate;
+}
+
+.sound-bars.is-on i:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.sound-bars.is-on i:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+@keyframes contactSoundBars {
+  from {
+    transform: scaleY(0.55);
+  }
+
+  to {
+    transform: scaleY(1.25);
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .contact {
+    height: 100svh;
+    min-height: 100svh;
+
+    padding:
+      105px
+      7vw
+      70px;
+  }
+
+  .contact-video {
+    object-position: center center;
+  }
+
+  .contact-video-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(2, 7, 16, 0.48) 0%,
+        rgba(2, 7, 16, 0.34) 45%,
+        rgba(2, 7, 16, 0.78) 100%
+      );
+  }
+
+  .contact-sound-toggle {
+    right: 7vw;
+    bottom: 24px;
+  }
+}
+
+/* =========================================================
+   CONTACT — FINAL FULLSCREEN VIDEO SLIDE
+   ========================================================= */
+
+/*
+ * The Contact section owns the footer.
+ * This is the key structural fix: the video, content and footer
+ * are all layers of the same 100svh section.
+ */
+#contact.contact {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 100svh;
+  margin: 0;
+  padding: 0 8vw;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ---------------------------------------------------------
+   VIDEO
+   --------------------------------------------------------- */
+
+#contact .contact-video {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 100%;
+  min-height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center center;
+
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------
+   VIDEO OVERLAY
+   --------------------------------------------------------- */
+
+#contact .contact-video-overlay {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 1;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 7, 17, 0.78) 0%,
+      rgba(2, 7, 17, 0.42) 50%,
+      rgba(2, 7, 17, 0.55) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(2, 7, 17, 0.38) 0%,
+      rgba(2, 7, 17, 0.20) 45%,
+      rgba(2, 7, 17, 0.68) 100%
+    );
+}
+
+/* ---------------------------------------------------------
+   CONTACT GRID / GLOW
+   --------------------------------------------------------- */
+
+#contact .contact-grid {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.12;
+}
+
+/* ---------------------------------------------------------
+   CONTACT CONTENT
+   --------------------------------------------------------- */
+
+#contact .contact-content {
+  position: relative;
+  z-index: 10;
+
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ---------------------------------------------------------
+   SOUND BUTTON
+   --------------------------------------------------------- */
+
+#contact .contact-sound-toggle {
+  position: absolute;
+
+  right: 5vw;
+  bottom: 105px;
+
+  z-index: 30;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 12px 17px;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+
+  background: rgba(3, 8, 18, 0.38);
+  color: #dce7f7;
+
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  transition:
+    background 250ms ease,
+    border-color 250ms ease,
+    transform 250ms ease;
+}
+
+#contact .contact-sound-toggle:hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-2px);
+}
+
+/* ---------------------------------------------------------
+   SOUND BARS
+   --------------------------------------------------------- */
+
+#contact .sound-bars {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 14px;
+}
+
+#contact .sound-bars i {
+  display: block;
+
+  width: 2px;
+  height: 6px;
+
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.7;
+}
+
+#contact .sound-bars i:nth-child(1) {
+  height: 6px;
+}
+
+#contact .sound-bars i:nth-child(2) {
+  height: 11px;
+}
+
+#contact .sound-bars i:nth-child(3) {
+  height: 8px;
+}
+
+#contact .sound-bars.is-on i {
+  animation: contactSoundBars 700ms ease-in-out infinite alternate;
+}
+
+#contact .sound-bars.is-on i:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+#contact .sound-bars.is-on i:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+@keyframes contactSoundBars {
+  from {
+    transform: scaleY(0.55);
+  }
+
+  to {
+    transform: scaleY(1.25);
+  }
+}
+
+/* ---------------------------------------------------------
+   NAVBAR OVER VIDEO
+   --------------------------------------------------------- */
+
+.nav {
+  z-index: 100;
+}
+
+.nav.nav-contact-active {
+  z-index: 100;
+
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+
+  pointer-events: auto !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 7, 17, 0.32),
+      transparent
+    ) !important;
+
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ---------------------------------------------------------
+   FOOTER
+   ---------------------------------------------------------
+   IMPORTANT:
+   This footer is now INSIDE #contact, so it is a layer over
+   the video instead of a separate black section below it.
+   --------------------------------------------------------- */
+
+#contact > .contact-footer {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 100%;
+  height: 82px;
+  min-height: 82px;
+
+  margin: 0;
+  padding: 0 5vw;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  background: transparent !important;
+  background-color: transparent !important;
+
+  border-top: 1px solid rgba(180, 200, 230, 0.18);
+
+  color: rgba(150, 170, 200, 0.85);
+
+  z-index: 20;
+
+  pointer-events: none;
+}
+
+/* Cancel any global footer pseudo-elements/backgrounds. */
+#contact > .contact-footer::before,
+#contact > .contact-footer::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Footer text */
+#contact > .contact-footer span {
+  display: block;
+
+  margin: 0;
+  padding: 0;
+
+  background: transparent !important;
+  color: rgba(150, 170, 200, 0.85) !important;
+
+  font-family: "DM Mono", monospace !important;
+  font-size: 9px !important;
+  line-height: 1;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase;
+}
+
+/* Make sure the old outside-footer rule cannot affect this design. */
+#contact + footer {
+  min-height: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------
+   MOBILE
+   --------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  #contact.contact {
+    width: 100%;
+    height: 100svh;
+    min-height: 100svh;
+
+    padding: 0 7vw;
+  }
+
+  #contact .contact-video {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  #contact .contact-video-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(2, 7, 17, 0.50) 0%,
+        rgba(2, 7, 17, 0.35) 45%,
+        rgba(2, 7, 17, 0.82) 100%
+      );
+  }
+
+  #contact .contact-content {
+    width: 100%;
+  }
+
+  #contact .contact-sound-toggle {
+    right: 6vw;
+    bottom: 86px;
+
+    padding: 10px 13px;
+    font-size: 9px;
+  }
+
+  #contact > .contact-footer {
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 68px;
+    min-height: 68px;
+
+    padding: 0 7vw;
+
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+  }
+
+  #contact > .contact-footer span {
+    max-width: 45%;
+
+    font-size: 8px !important;
+    line-height: 1.2;
+    letter-spacing: 0.10em !important;
+  }
+}
+
+/* Very narrow phones */
+@media (max-width: 420px) {
+  #contact .contact-sound-toggle {
+    right: 5vw;
+    bottom: 82px;
+
+    padding: 9px 11px;
+    font-size: 8px;
+  }
+
+  #contact > .contact-footer {
+    height: 62px;
+    min-height: 62px;
+
+    padding: 0 5vw;
+  }
+
+  #contact > .contact-footer span {
+    max-width: 46%;
+    font-size: 7px !important;
   }
 }

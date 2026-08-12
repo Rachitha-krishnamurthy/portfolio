@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -107,6 +107,82 @@ const projects = [
 export default function Home() {
   const [isNavScrolling, setIsNavScrolling] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isContactActive, setIsContactActive] = useState(false);
+  const [isSoundOn, setIsSoundOn] = useState(false);
+
+  const contactVideoRef = useRef<HTMLVideoElement | null>(null);
+  const hasUserInteracted = useRef(false);
+  const contactWasActive = useRef(false);
+
+  useEffect(() => {
+    const markInteraction = () => {
+      hasUserInteracted.current = true;
+    };
+
+    window.addEventListener("pointerdown", markInteraction, { passive: true });
+    window.addEventListener("keydown", markInteraction);
+
+    return () => {
+      window.removeEventListener("pointerdown", markInteraction);
+      window.removeEventListener("keydown", markInteraction);
+    };
+  }, []);
+
+  useEffect(() => {
+    const contact = document.getElementById("contact");
+
+    if (!contact) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const video = contactVideoRef.current;
+
+        if (!video) return;
+
+        const shouldActivate =
+          entry.isIntersecting && entry.intersectionRatio >= 0.55;
+
+        if (shouldActivate) {
+          setIsContactActive(true);
+
+          if (!contactWasActive.current) {
+            contactWasActive.current = true;
+            video.currentTime = 0;
+
+            if (hasUserInteracted.current) {
+              video.muted = false;
+
+              video
+                .play()
+                .then(() => setIsSoundOn(true))
+                .catch(() => {
+                  video.muted = true;
+                  setIsSoundOn(false);
+                  video.play().catch(() => undefined);
+                });
+            } else {
+              video.muted = true;
+              video.play().catch(() => undefined);
+              setIsSoundOn(false);
+            }
+          } else if (video.paused) {
+            video.play().catch(() => undefined);
+          }
+        } else if (!entry.isIntersecting) {
+          contactWasActive.current = false;
+          setIsContactActive(false);
+          video.pause();
+          video.muted = true;
+          setIsSoundOn(false);
+        }
+      },
+      { threshold: [0, 0.55, 0.75] }
+    );
+
+    observer.observe(contact);
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -126,6 +202,49 @@ export default function Home() {
     };
   }, []);
 
+  const enterContact = () => {
+    const video = contactVideoRef.current;
+
+    hasUserInteracted.current = true;
+    setIsContactActive(true);
+
+    if (video) {
+      video.currentTime = 0;
+      video.muted = false;
+
+      video
+        .play()
+        .then(() => setIsSoundOn(true))
+        .catch(() => {
+          video.muted = true;
+          setIsSoundOn(false);
+          video.play().catch(() => undefined);
+        });
+    }
+  };
+
+  const toggleContactSound = () => {
+    const video = contactVideoRef.current;
+
+    if (!video) return;
+
+    hasUserInteracted.current = true;
+
+    if (video.muted) {
+      video.muted = false;
+      video
+        .play()
+        .then(() => setIsSoundOn(true))
+        .catch(() => {
+          video.muted = true;
+          setIsSoundOn(false);
+        });
+    } else {
+      video.muted = true;
+      setIsSoundOn(false);
+    }
+  };
+
   return (
     <main>
       {/* Original 3D background */}
@@ -142,7 +261,9 @@ export default function Home() {
       <nav
         className={`nav${
           isNavScrolling && !isMobileMenuOpen ? " nav-hidden" : ""
-        }${isMobileMenuOpen ? " nav-menu-open" : ""}`}
+        }${isMobileMenuOpen ? " nav-menu-open" : ""}${
+          isContactActive ? " nav-contact-active" : ""
+        }`}
       >
         <a className="brand" href="#top">
           RK<span>.</span>
@@ -152,10 +273,10 @@ export default function Home() {
           <a href="#work">Work</a>
           <a href="#skills">Skills</a>
           <a href="#about">About</a>
-          <a href="#contact">Contact</a>
+          <a href="#contact" onClick={enterContact}>Contact</a>
         </div>
 
-        <a className="navcta" href="#contact">
+        <a className="navcta" href="#contact" onClick={enterContact}>
           Let&apos;s talk
           <ArrowUpRight size={15} />
         </a>
@@ -182,7 +303,7 @@ export default function Home() {
           <a href="#about" onClick={() => setIsMobileMenuOpen(false)}>
             About
           </a>
-          <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
+          <a href="#contact" onClick={() => { setIsMobileMenuOpen(false); enterContact(); }}>
             Contact
           </a>
         </div>
@@ -227,6 +348,7 @@ export default function Home() {
             <a
               className="secondary"
               href="#contact"
+              onClick={enterContact}
             >
               Contact me
               <ArrowUpRight size={17} />
@@ -775,77 +897,111 @@ export default function Home() {
         id="contact"
         className="contact cinematic-section"
       >
+        {/* Animated background video */}
+        <video
+          ref={contactVideoRef}
+          className="contact-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        >
+          <source src="/contact-bg.mp4" type="video/mp4" />
+        </video>
+
+        {/* Dark cinematic overlay */}
+        <div className="contact-video-overlay" />
+
+        <button
+          type="button"
+          className="contact-sound-toggle"
+          onClick={toggleContactSound}
+          aria-label={isSoundOn ? "Mute contact video" : "Enable contact video sound"}
+        >
+          <span className={isSoundOn ? "sound-bars is-on" : "sound-bars"}>
+            <i />
+            <i />
+            <i />
+          </span>
+          {isSoundOn ? "SOUND ON" : "ENABLE SOUND"}
+        </button>
+
+        {/* Existing ambient glow */}
         <div className="contact-grid" />
 
-        <p className="eyebrow">
-          07 — GET IN TOUCH
-        </p>
+        <div className="contact-content">
+          <p className="eyebrow">
+            07 — GET IN TOUCH
+          </p>
 
-        <h2>
-          Let&apos;s build something
-          <br />
-          <em>worth remembering.</em>
-        </h2>
-
-        <a
-          className="email"
-          href="mailto:rachithaammujk2004@gmail.com"
-        >
-          rachithaammujk2004@gmail.com
-          <ArrowUpRight />
-        </a>
-
-        <div className="socials">
-          <a
-            href="https://www.linkedin.com/in/rachitha-k-8399b0363/"
-            aria-label="LinkedIn"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Linkedin />
-          </a>
+          <h2>
+            Let&apos;s build something
+            <br />
+            <em>worth remembering.</em>
+          </h2>
 
           <a
-            href="https://github.com/Rachitha-krishnamurthyy"
-            aria-label="GitHub"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Github />
-          </a>
-
-          <a
+            className="email"
             href="mailto:rachithaammujk2004@gmail.com"
-            aria-label="Email"
           >
-            <Mail />
+            rachithaammujk2004@gmail.com
+            <ArrowUpRight />
           </a>
 
-          <span>
+          <div className="socials">
             <a
-              href="https://www.google.com/maps/place/C.M.R+Tomato+Market/@13.1199406,78.1099557,19z/data=!4m6!3m5!1s0x3badf07e53eb47bb:0xfaf2ad20b5767e18!8m2!3d13.1252733!4d78.1138498!16s%2Fg%2F11dz3rllyt?entry=ttu&g_ep=EgoyMDI2MDgwNS4xIKXMDSoASAFQAw%3D%3D"
+              href="https://www.linkedin.com/in/rachitha-k-8399b0363/"
+              aria-label="LinkedIn"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <MapPin />
-              Bengaluru, Karnataka
+              <Linkedin />
             </a>
-          </span>
+
+            <a
+              href="https://github.com/Rachitha-krishnamurthyy"
+              aria-label="GitHub"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github />
+            </a>
+
+            <a
+              href="mailto:rachithaammujk2004@gmail.com"
+              aria-label="Email"
+            >
+              <Mail />
+            </a>
+
+            <span>
+              <a
+                href="https://www.google.com/maps/place/C.M.R+Tomato+Market/@13.1199406,78.1099557,19z/data=!4m6!3m5!1s0x3badf07e53eb47bb:0xfaf2ad20b5767e18!8m2!3d13.1252733!4d78.1138498!16s%2Fg%2F11dz3rllyt?entry=ttu&g_ep=EgoyMDI2MDgwNS4xIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MapPin />
+                Bengaluru, Karnataka
+              </a>
+            </span>
+          </div>
         </div>
 
+        {/* =====================================================
+            FOOTER — PART OF CONTACT VIDEO SLIDE
+            ===================================================== */}
+
+        <footer className="contact-footer">
+          <span>RACHITHA K</span>
+
+          <span>
+            © 2026 · Built with Intent.
+          </span>
+        </footer>
       </section>
 
-      {/* =====================================================
-          FOOTER
-      ===================================================== */}
-
-      <footer>
-        <span>RACHITHA K</span>
-
-        <span>
-          © 2026 · Built with Intent.
-        </span>
-      </footer>
     </main>
   );
 }
